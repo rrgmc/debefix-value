@@ -44,7 +44,7 @@ func (f FilenameData) ResolveSource(ctx context.Context, resolvedData *debefix.R
 	if f.IsAbsolute {
 		return FileReaderFilename(f.Filename, f.Filename), true, nil
 	}
-	filename, err := getFilename(ctx, FileFieldSource, item.Info, f.Filename)
+	filename, err := getFilename(ctx, FileFieldSource, item.Info, tableID, f.Filename)
 	if err != nil {
 		return nil, false, fmt.Errorf("could not resolve filename: %w", err)
 	}
@@ -56,7 +56,7 @@ func (f FilenameData) ResolveDestination(ctx context.Context, resolvedData *debe
 	if f.IsAbsolute {
 		return FileWriterFilename(f.Filename, f.Filename), true, nil
 	}
-	filename, err := getFilename(ctx, FileFieldDestination, item.Info, f.Filename)
+	filename, err := getFilename(ctx, FileFieldDestination, item.Info, tableID, f.Filename)
 	if err != nil {
 		return nil, false, fmt.Errorf("could not resolve filename: %w", err)
 	}
@@ -111,7 +111,7 @@ func (f FilenameValueData) ResolveSource(ctx context.Context, resolvedData *debe
 	if f.IsAbsolute {
 		return FileReaderFilename(originalFilename, originalFilename), true, nil
 	}
-	filename, err := getFilename(ctx, FileFieldSource, item.Info, originalFilename)
+	filename, err := getFilename(ctx, FileFieldSource, item.Info, tableID, originalFilename)
 	if err != nil {
 		return nil, false, fmt.Errorf("could not resolve filename: %w", err)
 	}
@@ -130,7 +130,7 @@ func (f FilenameValueData) ResolveDestination(ctx context.Context, resolvedData 
 	if f.IsAbsolute {
 		return FileWriterFilename(originalFilename, originalFilename), true, nil
 	}
-	filename, err := getFilename(ctx, FileFieldDestination, item.Info, originalFilename)
+	filename, err := getFilename(ctx, FileFieldDestination, item.Info, tableID, originalFilename)
 	if err != nil {
 		return nil, false, fmt.Errorf("could not resolve filename: %w", err)
 	}
