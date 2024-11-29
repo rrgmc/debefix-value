@@ -5,6 +5,8 @@
 
 This module includes custom values that can be used to load data in fixtures.
 
+Values included in this module MUST ONLY use base or widely used modules (like `golang.org/x`). 
+
 ## Install
 
 ```shell
