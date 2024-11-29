@@ -13,7 +13,7 @@ const (
 	FileFieldDestination
 )
 
-type FilenameProvider func(ctx context.Context, fileField FileField, info any, tableID debefix.TableID, filename string) (string, error)
+type FilenameProvider func(ctx context.Context, fileField FileField, item Value, tableID debefix.TableID, filename string) (string, error)
 
 // Process is a [debefix.Process] that stores files to be copied, and copy them at the end of the process.
 type Process struct {

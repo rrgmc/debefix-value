@@ -7,7 +7,7 @@ import (
 	"github.com/rrgmc/debefix/v2"
 )
 
-func getFilename(ctx context.Context, fileField FileField, info any, tableID debefix.TableID, filename string) (string, error) {
+func getFilename(ctx context.Context, fileField FileField, item Value, tableID debefix.TableID, filename string) (string, error) {
 	process, err := fromContextCheck(ctx)
 	if err != nil {
 		return "", err
@@ -16,7 +16,7 @@ func getFilename(ctx context.Context, fileField FileField, info any, tableID deb
 		return "", errors.New("filename provider not set")
 	}
 
-	retfilename, err := process.filenameProvider(ctx, fileField, info, tableID, filename)
+	retfilename, err := process.filenameProvider(ctx, fileField, item, tableID, filename)
 	if err != nil {
 		return "", err
 	}
