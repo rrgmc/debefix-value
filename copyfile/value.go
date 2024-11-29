@@ -34,7 +34,7 @@ func New(info any, source FileSource, destination FileDestination, options ...Va
 	return ret
 }
 
-func (v Value) Resolve(ctx context.Context, resolvedData *debefix.ResolvedData, fieldName string, values debefix.ValuesMutable) error {
+func (v Value) Resolve(ctx context.Context, resolvedData *debefix.ResolvedData, tableID debefix.TableID, fieldName string, values debefix.ValuesMutable) error {
 	reader, readerOk, err := v.Source.ResolveSource(ctx, resolvedData, fieldName, values, v)
 	if err != nil {
 		return fmt.Errorf("error resolving source value: %w", err)

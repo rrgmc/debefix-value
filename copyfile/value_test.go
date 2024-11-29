@@ -34,7 +34,7 @@ func TestValue(t *testing.T) {
 
 	values := debefix.MapValues{}
 
-	err = v.Resolve(ctx, rd, "_copyfile", values)
+	err = v.Resolve(ctx, rd, debefix.TableName("x"), "_copyfile", values)
 	assert.NilError(t, err)
 
 	// fmt.Println(v)

@@ -3,7 +3,7 @@ module github.com/rrgmc/debefix-value/v2
 go 1.23
 
 require (
-	github.com/rrgmc/debefix/v2 v2.0.1
+	github.com/rrgmc/debefix/v2 v2.0.3
 	gotest.tools/v3 v3.5.1
 )
 
