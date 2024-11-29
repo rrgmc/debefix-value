@@ -9,12 +9,12 @@ import (
 )
 
 type FileSource interface {
-	ResolveSource(ctx context.Context, resolvedData *debefix.ResolvedData, fieldName string,
+	ResolveSource(ctx context.Context, resolvedData *debefix.ResolvedData, tableID debefix.TableID, fieldName string,
 		values debefix.ValuesMutable, item Value) (FileReader, bool, error)
 }
 
 type FileDestination interface {
-	ResolveDestination(ctx context.Context, resolvedData *debefix.ResolvedData, fieldName string,
+	ResolveDestination(ctx context.Context, resolvedData *debefix.ResolvedData, tableID debefix.TableID, fieldName string,
 		values debefix.ValuesMutable, item Value) (FileWriter, bool, error)
 }
 

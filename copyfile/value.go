@@ -35,7 +35,7 @@ func New(info any, source FileSource, destination FileDestination, options ...Va
 }
 
 func (v Value) Resolve(ctx context.Context, resolvedData *debefix.ResolvedData, tableID debefix.TableID, fieldName string, values debefix.ValuesMutable) error {
-	reader, readerOk, err := v.Source.ResolveSource(ctx, resolvedData, fieldName, values, v)
+	reader, readerOk, err := v.Source.ResolveSource(ctx, resolvedData, tableID, fieldName, values, v)
 	if err != nil {
 		return fmt.Errorf("error resolving source value: %w", err)
 	}
@@ -43,7 +43,7 @@ func (v Value) Resolve(ctx context.Context, resolvedData *debefix.ResolvedData, 
 		return debefix.ResolveLater
 	}
 
-	writer, writerOk, err := v.Destination.ResolveDestination(ctx, resolvedData, fieldName, values, v)
+	writer, writerOk, err := v.Destination.ResolveDestination(ctx, resolvedData, tableID, fieldName, values, v)
 	if err != nil {
 		return fmt.Errorf("error resolving destination value: %w", err)
 	}
@@ -52,7 +52,7 @@ func (v Value) Resolve(ctx context.Context, resolvedData *debefix.ResolvedData, 
 	}
 
 	if v.resolveCallback != nil {
-		err = v.resolveCallback(ctx, resolvedData, fieldName, values, v, reader, writer)
+		err = v.resolveCallback(ctx, resolvedData, tableID, fieldName, values, v, reader, writer)
 		if err != nil {
 			return err
 		}
@@ -61,7 +61,7 @@ func (v Value) Resolve(ctx context.Context, resolvedData *debefix.ResolvedData, 
 		if !ok || process.resolveCallback == nil {
 			return errors.New("no callback found to process copy file result")
 		}
-		err = process.resolveCallback(ctx, resolvedData, fieldName, values, v, reader, writer)
+		err = process.resolveCallback(ctx, resolvedData, tableID, fieldName, values, v, reader, writer)
 		if err != nil {
 			return err
 		}
@@ -69,17 +69,6 @@ func (v Value) Resolve(ctx context.Context, resolvedData *debefix.ResolvedData, 
 
 	return nil
 }
-
-// func (v Value) formatValue(ctx context.Context, value any, resolvedData *debefix.ResolvedData,
-// 	values debefix.Values) (any, bool, error) {
-// 	switch dv := value.(type) {
-// 	case debefix.Value:
-// 		return dv.ResolveValue(ctx, resolvedData, values)
-// 	case debefix.ValueMultiple:
-// 		return nil, false, errors.New("cannot use ValueMultiple in single-value context")
-// 	}
-// 	return value, true, nil
-// }
 
 func (v Value) TableDependencies() []debefix.TableID {
 	var deps []debefix.TableID

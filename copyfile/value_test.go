@@ -10,7 +10,7 @@ import (
 
 func TestValue(t *testing.T) {
 	process := NewProcess(
-		WithProcessResolveCallback(func(ctx context.Context, resolvedData *debefix.ResolvedData,
+		WithProcessResolveCallback(func(ctx context.Context, resolvedData *debefix.ResolvedData, tableID debefix.TableID,
 			fieldName string, values debefix.ValuesMutable, item Value, reader FileReader, writer FileWriter) error {
 			// fi, ok, err := reader.FileInfo(ctx)
 			// if err != nil {

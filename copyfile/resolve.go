@@ -9,11 +9,11 @@ import (
 )
 
 // ResolveCallback is the callback to resolve the field values and/or copy the file.
-type ResolveCallback func(ctx context.Context, resolvedData *debefix.ResolvedData, fieldName string,
+type ResolveCallback func(ctx context.Context, resolvedData *debefix.ResolvedData, tableID debefix.TableID, fieldName string,
 	values debefix.ValuesMutable, item Value, reader FileReader, writer FileWriter) error
 
 // ResolveCopyFile is a ResolveCallback which copies the data from reader to writer.
-func ResolveCopyFile(ctx context.Context, resolvedData *debefix.ResolvedData, fieldName string,
+func ResolveCopyFile(ctx context.Context, resolvedData *debefix.ResolvedData, tableID debefix.TableID, fieldName string,
 	values debefix.ValuesMutable, item Value, reader FileReader, writer FileWriter) error {
 	return CopyFile(ctx, reader, writer)
 }

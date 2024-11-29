@@ -39,7 +39,7 @@ func AbsoluteFilename(filename string, options ...FilenameOption) FilenameData {
 	return Filename(filename, slices.Concat([]FilenameOption{WithFileNameIsAbsolute(true)}, options)...)
 }
 
-func (f FilenameData) ResolveSource(ctx context.Context, resolvedData *debefix.ResolvedData, fieldName string,
+func (f FilenameData) ResolveSource(ctx context.Context, resolvedData *debefix.ResolvedData, tableID debefix.TableID, fieldName string,
 	values debefix.ValuesMutable, item Value) (FileReader, bool, error) {
 	if f.IsAbsolute {
 		return FileReaderFilename(f.Filename, f.Filename), true, nil
@@ -51,7 +51,7 @@ func (f FilenameData) ResolveSource(ctx context.Context, resolvedData *debefix.R
 	return FileReaderFilename(f.Filename, filename), true, nil
 }
 
-func (f FilenameData) ResolveDestination(ctx context.Context, resolvedData *debefix.ResolvedData, fieldName string,
+func (f FilenameData) ResolveDestination(ctx context.Context, resolvedData *debefix.ResolvedData, tableID debefix.TableID, fieldName string,
 	values debefix.ValuesMutable, item Value) (FileWriter, bool, error) {
 	if f.IsAbsolute {
 		return FileWriterFilename(f.Filename, f.Filename), true, nil
@@ -84,6 +84,7 @@ type FilenameValueData struct {
 
 var _ FileSource = FilenameValueData{}
 var _ FileDestination = FilenameValueData{}
+var _ debefix.ValueDependencies = FilenameValueData{}
 
 // FilenameValue is a path to a file.
 func FilenameValue(filename debefix.Value, options ...FilenameOption) FilenameValueData {
@@ -98,8 +99,8 @@ func FilenameValue(filename debefix.Value, options ...FilenameOption) FilenameVa
 	return ret
 }
 
-func (f FilenameValueData) ResolveSource(ctx context.Context, resolvedData *debefix.ResolvedData, fieldName string,
-	values debefix.ValuesMutable, item Value) (FileReader, bool, error) {
+func (f FilenameValueData) ResolveSource(ctx context.Context, resolvedData *debefix.ResolvedData, tableID debefix.TableID,
+	fieldName string, values debefix.ValuesMutable, item Value) (FileReader, bool, error) {
 	originalFilename, ok, err := f.getOriginalFilename(ctx, resolvedData, values)
 	if err != nil {
 		return nil, false, fmt.Errorf("could not resolve value: %w", err)
@@ -117,8 +118,8 @@ func (f FilenameValueData) ResolveSource(ctx context.Context, resolvedData *debe
 	return FileReaderFilename(originalFilename, filename), true, nil
 }
 
-func (f FilenameValueData) ResolveDestination(ctx context.Context, resolvedData *debefix.ResolvedData, fieldName string,
-	values debefix.ValuesMutable, item Value) (FileWriter, bool, error) {
+func (f FilenameValueData) ResolveDestination(ctx context.Context, resolvedData *debefix.ResolvedData, tableID debefix.TableID,
+	fieldName string, values debefix.ValuesMutable, item Value) (FileWriter, bool, error) {
 	originalFilename, ok, err := f.getOriginalFilename(ctx, resolvedData, values)
 	if err != nil {
 		return nil, false, fmt.Errorf("could not resolve value: %w", err)
@@ -153,12 +154,19 @@ func (f FilenameValueData) getOriginalFilename(ctx context.Context, resolvedData
 	return originalFilename, true, nil
 }
 
+func (f FilenameValueData) TableDependencies() []debefix.TableID {
+	if d, ok := f.Filename.(debefix.ValueDependencies); ok {
+		return d.TableDependencies()
+	}
+	return nil
+}
+
 // FilenameFormat formats a file name using [debefix.ValueFormat].
 func FilenameFormat(format string, args ...any) FilenameValueData {
 	return FilenameValue(debefix.ValueFormat(format, args...))
 }
 
-// FilenameFormat formats a file name using [debefix.ValueFormat].
+// FilenameFormatOpt formats a file name using [debefix.ValueFormat].
 func FilenameFormatOpt(format string, args []any, options ...FilenameOption) FilenameValueData {
 	return FilenameValue(debefix.ValueFormat(format, args...), options...)
 }
