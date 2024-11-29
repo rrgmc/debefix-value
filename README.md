@@ -11,6 +11,10 @@ This module includes custom values that can be used to load data in fixtures.
 go get -u github.com/rrgmc/debefix-value/v2
 ```
 
+## Values
+
+- [copyfile](https://github.com/rrgmc/debefix-value/tree/master/copyfile) (helper to handle external files like copying and file information)
+
 # License
 
 MIT
