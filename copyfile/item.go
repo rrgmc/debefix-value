@@ -185,6 +185,10 @@ func FileReaderFilename(filename string, filePath string) FileReaderFilenameData
 	}
 }
 
+func (f FileReaderFilenameData) String() string {
+	return f.FilePath
+}
+
 func (f FileReaderFilenameData) NewReader(ctx context.Context) (io.ReadCloser, error) {
 	return f.openFile()
 }
@@ -228,6 +232,10 @@ func FileReaderBytes(data []byte) FileReaderBytesData {
 	}
 }
 
+func (f FileReaderBytesData) String() string {
+	return fmt.Sprintf("%d bytes", len(f.Data))
+}
+
 func (f FileReaderBytesData) NewReader(ctx context.Context) (io.ReadCloser, error) {
 	return io.NopCloser(bytes.NewReader(f.Data)), nil
 }
@@ -251,6 +259,10 @@ func FileWriterFilename(filename string, filePath string) FileWriterFilenameData
 		Filename: filename,
 		FilePath: filePath,
 	}
+}
+
+func (f FileWriterFilenameData) String() string {
+	return f.FilePath
 }
 
 func (f FileWriterFilenameData) NewWriter(ctx context.Context) (io.WriteCloser, error) {
@@ -285,6 +297,10 @@ func FileReaderCache(fileSource FileReader) *FileReaderCacheData {
 	return &FileReaderCacheData{
 		fileSource: fileSource,
 	}
+}
+
+func (f *FileReaderCacheData) String() string {
+	return f.fileSource.String()
 }
 
 func (f *FileReaderCacheData) NewReader(ctx context.Context) (io.ReadCloser, error) {

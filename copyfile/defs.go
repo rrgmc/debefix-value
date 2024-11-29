@@ -21,10 +21,12 @@ type FileDestination interface {
 type FileReader interface {
 	NewReader(ctx context.Context) (io.ReadCloser, error)
 	FileInfo(ctx context.Context) (os.FileInfo, bool, error)
+	String() string
 }
 
 type FileWriter interface {
 	NewWriter(ctx context.Context) (io.WriteCloser, error)
+	String() string
 }
 
 type FileFilename interface {
