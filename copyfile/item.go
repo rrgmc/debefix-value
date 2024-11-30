@@ -171,9 +171,9 @@ func FilenameFormatOpt(format string, args []any, options ...FilenameOption) Fil
 	return FilenameValue(debefix.ValueFormat(format, args...), options...)
 }
 
-// FilenameFormatTemplate formats a file name using [debefix.ValueFormatTemplate].
-func FilenameFormatTemplate(template string, args map[string]any, options ...FilenameOption) FilenameValueData {
-	return FilenameValue(debefix.ValueFormatTemplate(template, args), options...)
+// FilenameTemplate formats a file name using [debefix.ValueTemplate].
+func FilenameTemplate(template string, args map[string]any, options ...FilenameOption) FilenameValueData {
+	return FilenameValue(debefix.ValueTemplate(template, args), options...)
 }
 
 // FileReader: filename
